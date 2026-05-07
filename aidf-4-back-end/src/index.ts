@@ -26,7 +26,15 @@ app.post(
 );
 //Middleware parse Json request to body
 app.use(express.json());
-app.use(cors({ origin: process.env.FRONTEND_URL }));
+app.use(cors({ 
+    origin: [
+        "http://localhost:5173",
+        process.env.FRONTEND_URL || "https://aidf-horizone-frontend-lashan.netlify.app"
+    ],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    allowedHeaders: ["Content-Type", "Authorization"]
+}));
 //connect to database
 connectDB();
 

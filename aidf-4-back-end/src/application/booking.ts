@@ -4,6 +4,7 @@ import Booking from '../infrastructure/schemas/Booking';
 import { Request, Response, NextFunction } from 'express';
 import Hotel from '../infrastructure/schemas/Hotel';
 import { AuthRequest } from '../types/auth-request';
+import NotFoundError from '../domain/errors/not-found-errors';
 
 
 
@@ -88,5 +89,23 @@ export const getAllBookings = async (req: Request, res: Response, next: NextFunc
     next(error);
 
   }
+};
+
+  export const getBookingById = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const bookingId = req.params.bookingId;
+      const booking = await Booking.findById(bookingId);
+      if (!booking) {
+        throw new NotFoundError("Booking not found");
+      }
+      res.status(200).json(booking);
+      return;
+    } catch (error) {
+      next(error);
+    }
 
 };

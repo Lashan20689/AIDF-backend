@@ -1,11 +1,15 @@
 import express from 'express';
+import "dotenv/config";
 import hotelsRouter from './api/hotel';
 import connectDB from './infrastructure/db';
-import "dotenv/config";
+
 import bookingsRouter from './api/booking';
 import cors from "cors";
 import globalErrorHandlingMiddleware from './api/middlewares/global-error-handling-middleware';
 import { clerkMiddleware } from '@clerk/express';
+import paymentsRouter from "./api/payment";
+import { handleWebhook } from "./application/payment";
+import bodyParser from "body-parser";
 
 
 
@@ -15,9 +19,14 @@ import { clerkMiddleware } from '@clerk/express';
 const app = express();
 
 app.use(clerkMiddleware());
+app.post(
+    "/api/stripe/webhook",
+    bodyParser.raw({ type: "application/json" }),
+    handleWebhook
+);
 //Middleware parse Json request to body
 app.use(express.json());
-app.use(cors({origin:"https://agent-69fc56ad486--aidf-horizone-frontend-lashan.netlify.app/"}));
+app.use(cors({ origin: process.env.FRONTEND_URL }));
 //connect to database
 connectDB();
 
@@ -33,6 +42,7 @@ connectDB();
 app.use("/api/hotels", hotelsRouter);
 
 app.use("/api/booking", bookingsRouter);
+app.use("/api/payments", paymentsRouter);
 
 //define in last error handling middleware
 app.use(globalErrorHandlingMiddleware);

@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "sourceMap": true,
+        "outDir": "./dist",
+        "lib": ["ESNext"],
+        "strict": true,
+        "esModuleInterop": true,  //when we give this we don't want add type="module" on package.json
+        "skipLibCheck": true
+        
+    },
+    "ts-node": {
+        "files": true,
+        "transpileOnly": true
+      }
+}

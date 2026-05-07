@@ -17,7 +17,7 @@ const app = express();
 app.use(clerkMiddleware());
 //Middleware parse Json request to body
 app.use(express.json());
-app.use(cors());
+app.use(cors({origin:"https://agent-69fc56ad486--aidf-horizone-frontend-lashan.netlify.app/"}));
 //connect to database
 connectDB();
 
